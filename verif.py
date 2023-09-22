@@ -23,8 +23,7 @@ import Status
 # squirrel_dir=os.path.abspath(os.curdir)
 # NSCB_dir=os.path.abspath('../'+(os.curdir))
 
-
-if __name__ == '__main__':
+def verify(file):
 	try:
 		# urllib3.disable_warnings()
 		parser = argparse.ArgumentParser()
@@ -43,8 +42,7 @@ if __name__ == '__main__':
 
 
 	
-		for filename in args.file:
-			filename=filename
+		filename = file
 		# filename = "/home/themoon/Downloads/Cult_of_the_Lamb_-_Cult_of_the_Lamb_-_Cthulhu_Follower_Form_01002E7016C47001v0DLC(1).nsz"
 		dir=os.path.dirname(os.path.abspath(filename))
 		info='INFO'
@@ -60,11 +58,11 @@ if __name__ == '__main__':
 
 		check,feed=f.verify()
 		if check == False:
-			exit( 1)
+			return False
 
 		verdict,headerlist,feed=f.verify_sig(feed,tmpfolder)
 		if verdict == False:
-			exit( 2)
+			return False
 		print(filename)
 		if filename.endswith('.nsz') :
 			verdict,feed=f.nsz_hasher(buffer,headerlist,verdict,feed)
@@ -75,11 +73,11 @@ if __name__ == '__main__':
 		f.flush()
 		f.close()
 
-		if verdict == False:
-			exit( 3)
+
 
 		Status.close()
-
+  
+		return verdict
 	except KeyboardInterrupt:
 		Config.isRunning = False
 		Status.close()
@@ -87,7 +85,7 @@ if __name__ == '__main__':
 		Config.isRunning = False
 		Status.close()
 		raise e
-		exit(-1)
+		
 
 
 
