@@ -4,26 +4,40 @@ import requests
 import verif  
 import shutil
 
-CONTRIB_PATH = "/home/themoon/Downloads/mhr/switch games/West of Loathing [NSZ]/"
-STASH_PATH = "/home/themoon/googledrive/contrib"
-DISCORD_WEBHOOK_URL = "https://discord.com/aksdpanf"  # Replace with your actual webhook URL
+import argparse
+parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument("-c", "--contrib-path", help="input folder (games)")
+parser.add_argument("-s", "--stash-path", help="output folder (valid games are moved to here)")
+parser.add_argument("-w", "--webhook-url", help="discord webhook url", required=False)
+args = parser.parse_args()
+config = vars(args)
+
+CONTRIB_PATH = config["contrib_path"]
+STASH_PATH = config["stash_path"]
+DISCORD_WEBHOOK_URL = config["webhook_url"]
 
 def send_hook(message_content):
-    payload = {
-        "username": "Contributions",
-        "content": message_content
-    }
-    headers = {"Content-type": "application/json"}
-    response = requests.post(DISCORD_WEBHOOK_URL, data=json.dumps(payload), headers=headers)
-    response.raise_for_status()
+    try:
+        print(message_content)
+        payload = {
+            "username": "Contributions",
+            "content": message_content
+        }
+        headers = {"Content-type": "application/json"}
+        response = requests.post(DISCORD_WEBHOOK_URL, data=json.dumps(payload), headers=headers)
+        response.raise_for_status()
+    except: pass
 
 def handle_folder(folder_name):
     final_path = os.path.join(CONTRIB_PATH, folder_name)
     try:
-        os.makedirs(final_path, exist_ok=True)  # Create the folder if it doesn't exist
+        if not os.path.exists(final_path):
+            os.makedirs(final_path)
+            print("Please put your game files in: " + final_path + " and run this script again.") 
+
         for filename in os.listdir(final_path):
+            print(filename)
             file_path = os.path.join(final_path, filename)
-            print(f"new file found: {filename}")
             send_hook(f"new file found: {filename}")
             
             if verif.verify(file_path):
@@ -39,6 +53,9 @@ def handle_folder(folder_name):
         send_hook(f"An error occurred: {str(e)}")
 
 if __name__ == "__main__":
-    handle_folder("DLC")
-    handle_folder("Base")
-    handle_folder("Update")
+    if CONTRIB_PATH and STASH_PATH:
+        handle_folder("DLC")
+        handle_folder("Base")
+        handle_folder("Update")
+    else: 
+        parser.print_help()

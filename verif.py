@@ -29,14 +29,8 @@ def verify(file):
 		parser = argparse.ArgumentParser()
 		parser.add_argument('file',nargs='*')
 
-		# INFORMATION
-		args = parser.parse_args()
-
 		Status.start()
 
-		indent = 1
-		tabs = '\t' * indent
-		trans=True
 
 		import Fs	
 
@@ -45,15 +39,10 @@ def verify(file):
 		filename = file
 		# filename = "/home/themoon/Downloads/Cult_of_the_Lamb_-_Cult_of_the_Lamb_-_Cthulhu_Follower_Form_01002E7016C47001v0DLC(1).nsz"
 		dir=os.path.dirname(os.path.abspath(filename))
-		info='INFO'
-		ofolder =os.path.join(dir,info)
 		tmpfolder =os.path.join(dir,'tmp')
 		feed=''
-		vertype="lv3"
 		buffer = 65536
 
-		basename=str(os.path.basename(os.path.abspath(filename)))
-		ofile=basename[:-4]+ '-' + basename[-3:] + '-verify.txt'
 		f = Fs.Nsp(filename, 'rb')
 
 		check,feed=f.verify()
