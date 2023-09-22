@@ -5,13 +5,15 @@
 CONTRIB_PATH="/home/themoon/googledrive/perso"
 STASH_PATH="/home/themoon/googledrive/contrib"
 
+cd "$(dirname "$0")"
+
 send_hook() {
     #args:
     # message content
     json='{"username": "Contributions", "content":"'
     json=$json$1
     json=$json'"}'
-    curl -H "Content-type:application/json" -d "$json" <discord webhook URL goes here>
+    curl -H "Content-type:application/json" -d "$json" https://discord.com/api/webhooks/1154541035091939358/CW0oLG2gJzzbe_KrCOqHc4JIhfYcF8s5XFVAdb_qEKmC99N8ROoxHBkCY5EPr2gRlKkx
 }
 
 
@@ -26,7 +28,7 @@ handle_folder() {
         filename=$(basename "$file")
         echo "new file found : $filename"
         send_hook "new file found: $filename"
-        if nsz -V "$file"; then
+        if  .venv/bin/python verif.py "$file"; then
             send_hook "Signature valid, moving to stash..."
             mv "$file" "$STASH_PATH/$1"
             send_hook "Done"
