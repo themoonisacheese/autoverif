@@ -13,7 +13,7 @@ send_hook() {
     json='{"username": "Contributions", "content":"'
     json=$json$1
     json=$json'"}'
-    curl -H "Content-type:application/json" -d "$json" https://discord.com/api/webhooks/1154541035091939358/CW0oLG2gJzzbe_KrCOqHc4JIhfYcF8s5XFVAdb_qEKmC99N8ROoxHBkCY5EPr2gRlKkx
+    curl -H "Content-type:application/json" -d "$json" <discord webhook url>
 }
 
 
