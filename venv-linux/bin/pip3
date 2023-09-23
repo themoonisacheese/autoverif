@@ -1,4 +1,4 @@
-#!/home/themoon/autoverif/.venv/bin/python3
+#!/home/themoon/autoverif/venv-linux/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

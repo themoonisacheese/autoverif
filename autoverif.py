@@ -51,6 +51,7 @@ def handle_folder(folder_name):
                 os.remove(file_path)
     except Exception as e:
         send_hook(f"An error occurred: {str(e)}")
+        raise e
 
 if __name__ == "__main__":
     if CONTRIB_PATH and STASH_PATH:
