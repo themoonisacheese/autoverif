@@ -17,10 +17,10 @@ Auto verify NSP, NSZ, XCI, XCZ to check if they have a valid hash and signature
 
 ## Windows
 ```
-.\venv-windows\Scripts\python.exe autoverif.py -s "/path/to/your/unverified/games/folder" -c "/path/to/output/foler"
+.\venv-windows\Scripts\python.exe autoverif.py -c "/path/to/your/unverified/games/folder" -s "/path/to/output/foler"
 ```
 
 ## Linux
 ```
-./venv-linux/bin/python autoverif.py -s "/path/to/your/unverified/games/folder" -c "/path/to/output/foler"
+./venv-linux/bin/python autoverif.py -c "/path/to/your/unverified/games/folder" -s "/path/to/output/foler"
 ```
