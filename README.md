@@ -15,7 +15,7 @@ Auto verify NSP, NSZ, XCI, XCZ to check if they have a valid hash and signature
   -w WEBHOOK_URL, --webhook-url WEBHOOK_URL
                         discord webhook url
   -t, --check-stash     check for games with invalid format
-
+```
 # Examples
 
 ## Windows
