@@ -54,6 +54,62 @@ def handle_folder(folder_name):
     except Exception as e:
         send_hook(f"An error occurred: {str(e)}")
 
+def check_folder(folder_name):
+    final_path = os.path.join(STASH_PATH, folder_name)
+    if not os.path.exists(final_path):
+        os.makedirs(final_path)
+        print("Please put your game files in: " + final_path + " and run this script again.") 
+
+    print(f"\nFiles found in {folder_name} : {len(os.listdir(final_path))}")
+
+    if len(os.listdir(final_path)) == 0:
+        return print("No files found, skipping folder")
+    
+    print("Checking for invalid files...\n")
+    for filename in os.listdir(final_path):
+        try:
+            file_path = str(os.path.join(final_path, filename))
+            send_hook(f"\nnew file found: {filename}")
+            if not file_path.endswith(("nsp", "nsz", "xci", "xcz")):
+                send_hook("Not a valid file extension. Skipping file...")
+            
+            else:
+                titleid = None
+                ver = None
+                filetype = None
+
+                send_hook("Checking syntax...")
+                res = re.findall(r'\[([A-Za-z0-9_. ]+)\]',filename)
+
+                for arg in res:
+                    if len(arg) == 16:
+                        titleid = arg
+                    if arg.upper() in ["BASE", "UPD", "DLC", "UPDATE"] :
+                        filetype = arg
+                    if arg.lower().startswith("v") or (arg[:1].isdigit() and len(arg) < 16):
+                        ver = arg
+
+                print(f"\nTitleID: {titleid}\nVersion: {ver}\nFiletype: {filetype}\n")
+
+                if not titleid or not ver:
+                    send_hook("Syntax invalid! Writing that down...")
+                    with open("invalid.txt", "a") as f:
+                        if titleid == None and ver == None:
+                            f.write(f"\nFOLDER: {folder_name}\n{filename}: MISSING TITLEID AND VERSION\n")
+                        else:
+                            if titleid == None:
+                                f.write(f"\nFOLDER: {folder_name}\n{filename}: MISSING TITLEID\n")
+                            if ver == None:
+                                f.write(f"\nFOLDER: {folder_name}\n{filename}: MISSING VERSION\n")
+
+                else:
+                    send_hook("Syntax valid!")
+    
+        except Exception as e:
+            send_hook(f"An error occurred: {str(e)}") 
+    print("done! for invalid files check invalid.txt")     
+
+        
 
 if __name__ == "__main__":
     if CONTRIB_PATH and STASH_PATH:
