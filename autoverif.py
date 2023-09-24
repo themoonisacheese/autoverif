@@ -8,7 +8,7 @@ import re
 import argparse
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("-c", "--contrib-path", help="input folder (games)")
-parser.add_argument("-s", "--stash-path", help="output folder (valid games are moved to here)")
+parser.add_argument("-s", "--stash-path", help="output folder (valid games are moved here)")
 parser.add_argument("-w", "--webhook-url", help="discord webhook url", required=False)
 parser.add_argument("-t", "--check-stash", action="store_true", help="check for games with invalid format", required=False)
 args = parser.parse_args()

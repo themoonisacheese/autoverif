@@ -9,11 +9,11 @@ Auto verify NSP, NSZ, XCI, XCZ to check if they have a valid hash and signature
 ```
   -h, --help            show help message and exit
   -c CONTRIB_PATH, --contrib-path CONTRIB_PATH
-                        input folder (games) (default: None)
+                        input folder (games)
   -s STASH_PATH, --stash-path STASH_PATH
-                        output folder (valid games are moved to here) (default: None)
+                        output folder (valid games are moved here)
   -w WEBHOOK_URL, --webhook-url WEBHOOK_URL
-                        discord webhook url (default: None)
+                        discord webhook url
   -t, --check-stash     check for games with invalid format
 
 # Examples
