@@ -3,18 +3,21 @@ import json
 import requests
 import verif  
 import shutil
+import re
 
 import argparse
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("-c", "--contrib-path", help="input folder (games)")
 parser.add_argument("-s", "--stash-path", help="output folder (valid games are moved to here)")
 parser.add_argument("-w", "--webhook-url", help="discord webhook url", required=False)
+parser.add_argument("-t", "--check-stash", action="store_true", help="check for games with invalid format", required=False)
 args = parser.parse_args()
 config = vars(args)
 
 CONTRIB_PATH = config["contrib_path"]
 STASH_PATH = config["stash_path"]
 DISCORD_WEBHOOK_URL = config["webhook_url"]
+CHECK_STASH = config["check_stash"]
 
 def send_hook(message_content):
     try:
@@ -36,7 +39,6 @@ def handle_folder(folder_name):
             print("Please put your game files in: " + final_path + " and run this script again.") 
 
         for filename in os.listdir(final_path):
-            print(filename)
             file_path = os.path.join(final_path, filename)
             send_hook(f"new file found: {filename}")
             
@@ -52,10 +54,16 @@ def handle_folder(folder_name):
     except Exception as e:
         send_hook(f"An error occurred: {str(e)}")
 
+
 if __name__ == "__main__":
     if CONTRIB_PATH and STASH_PATH:
         handle_folder("DLC")
         handle_folder("Base")
-        handle_folder("Update")
+        handle_folder("UPD")
+    elif STASH_PATH and CHECK_STASH:
+        check_folder("DLC")
+        check_folder("UPD")
+        check_folder("Base")
+        
     else: 
         parser.print_help()
