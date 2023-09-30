@@ -2050,22 +2050,26 @@ class Nca(File):
 				else:
 					orig_header = False
 				if ver == True:
+					isproperDump = True
 					OGGC=self.header.getgamecard()
 					chkkg=currkg
 					if targetkg == False:
 						message=(indent+printname+arrow+'is PROPER');print(message);feed+=message+'\n'
 					else:
+						isProperDump = False
 						if progress != False:
 							message=(tabs+'* '+"ORIGIN OF CNMT FILE IS PROPER");bar.write(message);feed+=message+'\n'
 						else:
 							message=(tabs+'* '+"ORIGIN OF CNMT FILE IS PROPER");print(message);feed+=message+'\n'
 					if kgchg == True:
+						isProperDump = False
 						if progress != False:
 							message=(tabs+'* '+"KEYGENERATION WAS CHANGED FROM "+str(orkg)+" TO "+str(currkg));bar.write(message);feed+=message+'\n'
 						else:
 							message=(tabs+'* '+"KEYGENERATION WAS CHANGED FROM "+str(orkg)+" TO "+str(currkg));print(message);feed+=message+'\n'
 						chkkg=orkg
 					if cardchange == True:
+						isProperDump = False
 						if self.header.getgamecard() != 0:
 							OGGC=0
 							if progress != False:
@@ -2078,7 +2082,7 @@ class Nca(File):
 								message=(tabs+'* '+"ISGAMECARD WAS CHANGED FROM 1 TO 0");bar.write(message);feed+=message+'\n'
 							else:
 								message=(tabs+'* '+"ISGAMECARD WAS CHANGED FROM 1 TO 0");print(message);feed+=message+'\n'
-					return True,orig_header,self._path,feed,chkkg,False,False,OGGC
+					return isProperDump,orig_header,self._path,feed,chkkg,False,False,OGGC
 				else:
 					if self.header.contentType == Type.Content.META:
 						if targetkg == False:
