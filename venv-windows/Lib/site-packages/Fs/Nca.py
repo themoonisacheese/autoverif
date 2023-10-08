@@ -2032,7 +2032,7 @@ class Nca(File):
 						tcheck=(str(hx(titlekey)).upper())[2:-1]
 						if tcheck == '00000000000000000000000000000000':
 							message=(tabs+'* '+"WARNING: sum(titlekey)=0 -> S.C. conversion may be incorrect and come from nsx file");print(message);feed+=message+'\n'
-					return True,orig_header,self._path,feed,orkg,tr,titlekey,self.header.getgamecard()
+					return False,orig_header,self._path,feed,orkg,tr,titlekey,self.header.getgamecard()
 				else:
 					message=(indent+self._path+arrow+'was MODIFIED');print(message);feed+=message+'\n'
 					message=(tabs+'* '+"NOT VERIFIABLE COULD'VE BEEN TAMPERED WITH");print(message);feed+=message+'\n'

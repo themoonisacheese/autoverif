@@ -8470,15 +8470,18 @@ class Nsp(Pfs0):
 								checktik = self.verify_key(str(f._path),tikfile)
 								if 	checktik == True:
 									break
-					if checktik==False and str(self._path).endswith('.nsz'):
-						checktik='nsz'
+						if str(f._path).endswith('.ncz'):
+							fncz = Nca(f)
+							if checktik == False and fncz.header.getRightsId() != 0:
+								checktik = 'nsz'
+								break
 					message=('Content.TICKET');print(message);feed+=message+'\n'
 					cert=file[:-3]+'cert'
 					if not cert in listed_certs:
 						cert_message=f"{cert}{tabs}  -> Warning: is MISSING"
 					else:
 						for f in self:
-							if  f._path==cert:
+							if f._path==cert:
 								certfile=f.read()
 								from Fs.Ticket import PublicCert
 								pcert=PublicCert()
@@ -8489,8 +8492,7 @@ class Nsp(Pfs0):
 								elif certfile==pubcertDBI:
 									cert_message=f"{cert}{tabs}  -> is CORRECT (DBI)"
 								else:
-									# cert_message=f"{cert}{tabs}  -> Warning: doesn't follow normalized standard"
-									cert_message=f"{cert}{tabs}  -> exists"
+									cert_message=f"{cert}{tabs}  -> Warning: doesn't follow normalized standard"
 					correct = checktik
 				else:
 					correct=False
@@ -8513,7 +8515,7 @@ class Nsp(Pfs0):
 					message=(tabs+file+tabs+'  -> is CORRUPT <<<-');print(message);feed+=message+'\n'
 					if baddec == True:
 						message=(tabs+'  * NOTE: S.C. CONVERSION WAS PERFORMED WITH BAD KEY');print(message);feed+=message+'\n'
-				elif file.endswith('tik') and not str(self._path).endswith('.nsz'):
+				elif file.endswith('tik'):
 					message=(tabs+file+tabs+'  -> titlekey is INCORRECT <<<-');print(message);feed+=message+'\n'
 			if cert_message!=False:
 				message=('Content.CERTIFICATE');print(message);feed+=message+'\n'
@@ -8585,6 +8587,8 @@ class Nsp(Pfs0):
 				ticketlist.append(str(ticket._path))
 		titlerights=list()
 		for nca in self:
+			if str(nca._path).endswith('.ncz'):
+				nca = Nca(nca)
 			if type(nca) == Nca:
 				if nca.header.getRightsId() != 0:
 					rightsId = hx(nca.header.getRightsId().to_bytes(0x10, byteorder='big')).decode('utf-8').lower()
@@ -8984,6 +8988,7 @@ class Nsp(Pfs0):
 
 	def verify_key(self,nca,ticket,userkey=False,orig_kg=False):
 		verticket=ticket
+		# print(self, nca)
 		for file in self:
 			if type(file) == Nca:
 				crypto1=file.header.getCryptoType()
@@ -9031,8 +9036,6 @@ class Nsp(Pfs0):
 			if str(f._path) == nca:
 				if type(f) == Fs.Nca and f.header.getRightsId() != 0:
 					for fs in f.sectionFilesystems:
-						#print(fs.fsType)
-						#print(fs.cryptoType)
 						if fs.fsType == Type.Fs.PFS0 and fs.cryptoType == Type.Crypto.CTR:
 							f.seek(0)
 							ncaHeader = NcaHeader()
