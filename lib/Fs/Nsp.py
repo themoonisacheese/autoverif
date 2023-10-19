@@ -8402,6 +8402,16 @@ class Nsp(Pfs0):
 				validfiles.append(str(file._path))
 			if str(file._path).endswith('.cert'):
 				listed_certs.append(str(file._path))
+		
+		titlerights=list()
+		for nca in self:
+			if str(nca._path).endswith('.ncz'):
+				nca = Nca(nca)
+			if type(nca) == Nca:
+				if nca.header.getRightsId() != 0:
+					rightsId = hx(nca.header.getRightsId().to_bytes(0x10, byteorder='big')).decode('utf-8').lower()
+					if rightsId not in titlerights:
+						titlerights.append(rightsId)
 
 		for file in listed_files:
 			correct=False;baddec=False;cert_message=False
@@ -8475,6 +8485,8 @@ class Nsp(Pfs0):
 							if checktik == False and fncz.header.getRightsId() != 0:
 								checktik = 'nsz'
 								break
+					if len(titlerights) < 1:
+						checktik = 'unused'
 					message=('Content.TICKET');print(message);feed+=message+'\n'
 					cert=file[:-3]+'cert'
 					if not cert in listed_certs:
@@ -8507,8 +8519,12 @@ class Nsp(Pfs0):
 				if file.endswith('.tik'):
 					message=(tabs+file+tabs+'  -> exists');print(message);feed+=message+'\n'
 				pass
+			elif correct=='unused':
+				if file.endswith('.tik'):
+					message=(tabs+file+tabs+'  -> exists (unused)');print(message);feed+=message+'\n'
+				pass
 			else:
-				verdict=False
+				verdict = False
 				if file.endswith('cnmt.nca'):
 					message=(tabs+file+' -> is CORRUPT <<<-');print(message);feed+=message+'\n'
 				elif file.endswith('nca'):
@@ -8585,19 +8601,12 @@ class Nsp(Pfs0):
 		for ticket in self:
 			if type(ticket) == Ticket:
 				ticketlist.append(str(ticket._path))
-		titlerights=list()
-		for nca in self:
-			if str(nca._path).endswith('.ncz'):
-				nca = Nca(nca)
-			if type(nca) == Nca:
-				if nca.header.getRightsId() != 0:
-					rightsId = hx(nca.header.getRightsId().to_bytes(0x10, byteorder='big')).decode('utf-8').lower()
-					if rightsId not in titlerights:
-						titlerights.append(rightsId)
-						mtick=rightsId+'.tik'
-						if mtick not in ticketlist:
-							message=('\n- File has titlerights!!! Missing ticket: '+mtick);print(message);feed+=message+'\n'
-							verdict = False
+		
+		for rightsId in titlerights:
+			mtick = f'{rightsId}.tik'
+			if mtick not in ticketlist:
+				message=('\n- File has titlerights!!! Missing ticket: '+mtick);print(message);feed+=message+'\n'
+				verdict = False
 
 		if str(self.path).endswith('.nsz'):
 			token='NSZ'
