@@ -56,3 +56,4 @@ yarg==0.1.9
 zope.event==5.0
 zope.interface==6.0
 zstandard==0.21.0
+pywin32==306; sys_platform=='win32'

@@ -1,8 +1,10 @@
 # autoverif 
 Auto verify NSP, NSZ, XCI, XCZ to check if they have a valid hash and signature, on Linux and Windows.
 
-# Usage
+Verification code stolen from NSCB, with mods from @seiya-git.
+This is essentially a stripped down squirrel.py that does only verification, meant for batch processing of stashes.
 
+# Usage
 
 ```
   -h, --help            show help message and exit
@@ -35,6 +37,9 @@ python3 autoverify.py -c /path/to/unverified/games -s /path/to/stash
 ```
 
 /path/to/unverified/games must contain folders named "Base", "UPD", and "DLC" (case sensitive). Only files in these folders will be checked.
+
 If the folders in the contrib or stash directory do not exist, they will be created.
+
 Files that pass the signature verification will be moved to their corresponding folder in the stash directory (ie, Base to Base, etc. Only the source folder is actually considered, not whether the file really is a Base nsp).
+
 Files that do not pass the signature verification will be **PERMANENTLY DELETED** (they don't validate anyway why do you have them?). This may or may not include random non-verifiable files (eg: text files, photos of your cat, your hard drive's partition table) that happen to be there.
