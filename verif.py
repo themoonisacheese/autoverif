@@ -42,15 +42,25 @@ def verify(file):
 		tmpfolder =os.path.join(dir,'tmp')
 		feed=''
 		buffer = 65536
-
-		f = Fs.Nsp(filename, 'rb')
-
+		if filename.lower().endswith('.nsp') or filename.lower().endswith('.nsz'):
+			f = Fs.Nsp(filename, 'rb')
+		elif filename.lower().endswith('.xcz') or filename.lower().endswith('.xci'):
+			f = Fs.Xci(filename, 'rb')
+		else:
+			raise Exception("{1} does not have the appropriate extension".format(filename))
+   
+   
 		check,feed=f.verify()
+  
 		if check == False:
+			f.flush()
+			f.close()
 			return False
 
 		verdict,headerlist,feed=f.verify_sig(feed,tmpfolder)
 		if verdict == False:
+			f.flush()
+			f.close()
 			return False
 		print(filename)
 		if filename.endswith('.nsz') :

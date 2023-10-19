@@ -24,7 +24,7 @@ cd autoverif
 python3 -m venv .venv
 
 #Windows:
-.venv.\Scripts\activate.bat
+.venv\Scripts\activate.bat
 #Linux:
 source .venv/bin/activate
 
