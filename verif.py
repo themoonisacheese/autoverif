@@ -43,9 +43,9 @@ def verify(file):
 		feed=''
 		buffer = 65536
 		if filename.lower().endswith('.nsp') or filename.lower().endswith('.nsz'):
-			f = Fs.Nsp(filename, 'rb')
+			f = Fs.Nsp(filename)
 		elif filename.lower().endswith('.xcz') or filename.lower().endswith('.xci'):
-			f = Fs.Xci(filename, 'rb')
+			f = Fs.Xci(filename)
 		else:
 			raise Exception("{1} does not have the appropriate extension".format(filename))
    
