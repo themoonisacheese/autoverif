@@ -18,6 +18,7 @@ try:
 except:pass	
 import Config
 import Status	
+from pathlib import Path
 
 # # SET ENVIRONMENT
 # squirrel_dir=os.path.abspath(os.curdir)
@@ -45,7 +46,7 @@ def verify(file):
 		if filename.lower().endswith(('.nsp','.nsz')):
 			f = Fs.Nsp(filename)
 		elif filename.lower().endswith('.xci'):
-			f = Fs.factory(filename)
+			f = Fs.factory(Path(filename))
 			f.open(filename, 'rb')
 		elif filename.lower().endswith('.xcz'):
 			f = Fs.Xci(filename)
