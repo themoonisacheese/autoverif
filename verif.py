@@ -42,9 +42,12 @@ def verify(file):
 		tmpfolder =os.path.join(dir,'tmp')
 		feed=''
 		buffer = 65536
-		if filename.lower().endswith('.nsp') or filename.lower().endswith('.nsz'):
+		if filename.lower().endswith(('.nsp','.nsz')):
 			f = Fs.Nsp(filename)
-		elif filename.lower().endswith('.xcz') or filename.lower().endswith('.xci'):
+		elif filename.lower().endswith('.xci'):
+			f = Fs.factory(filename)
+			f.open(filename, 'rb')
+		elif filename.lower().endswith('.xcz'):
 			f = Fs.Xci(filename)
 		else:
 			raise Exception("{1} does not have the appropriate extension".format(filename))
@@ -63,9 +66,9 @@ def verify(file):
 			f.close()
 			return False
 		print(filename)
-		if filename.endswith('.nsz') :
+		if filename.endswith('.nsz'):
 			verdict,feed=f.nsz_hasher(buffer,headerlist,verdict,feed)
-		elif filename.endswith('.xcz') :
+		elif filename.endswith('.xcz'):
 			verdict,feed=f.xcz_hasher(buffer,headerlist,verdict,feed)
 		else:
 			verdict,feed=f.verify_hash_nca(buffer,headerlist,verdict,feed)
