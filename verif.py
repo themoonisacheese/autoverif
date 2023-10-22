@@ -17,8 +17,7 @@ try:
 	sys.path.insert(0, 'private')
 except:pass	
 import Config
-import Status	
-from pathlib import Path
+import Status
 
 # # SET ENVIRONMENT
 # squirrel_dir=os.path.abspath(os.curdir)
@@ -46,7 +45,7 @@ def verify(file):
 		if filename.lower().endswith(('.nsp','.nsz')):
 			f = Fs.Nsp(filename)
 		elif filename.lower().endswith('.xci'):
-			f = Fs.factory(Path(filename))
+			f = Fs.factory(filename)
 			f.open(filename, 'rb')
 		elif filename.lower().endswith('.xcz'):
 			f = Fs.Xci(filename)
